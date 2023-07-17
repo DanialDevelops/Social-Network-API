@@ -18,10 +18,10 @@ router.route('/:userId')
   .put(updateUser)
   .delete(deleteUser);
 
-router.route('/:userId/assignments')
+router.route('/:userId/thoughts')
   .post(addThought);
 
-router.route('/:userId/assignments/:assignmentId')
+router.route('/:userId/thoughts/:thoughtId')
   .delete(removeThought);
 
 router.route('/:userId/friends/:friendId')
