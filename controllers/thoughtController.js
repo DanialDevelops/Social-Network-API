@@ -1,4 +1,5 @@
-const { Thought, User } = require('../models');
+const { Thought, User, } = require('../models');
+const Reaction = require('../models/Reaction.js');
 
 module.exports = {
  
@@ -71,19 +72,19 @@ module.exports = {
     try {
       const { thoughtId } = req.params;
       const { reactionBody, username } = req.body;
-
+  
       const thought = await Thought.findById(thoughtId);
       if (!thought) {
         return res.status(404).json({ message: 'Thought not found' });
       }
-
+  
       const reaction = await Reaction.create({ reactionBody, username });
       thought.reactions.push(reaction);
       await thought.save();
-
+  
       res.status(201).json(reaction);
     } catch (err) {
-      res.status(500).json(err);
+      res.status(500).json({ message: 'Error creating reaction', error: err.message });
     }
   },
 
