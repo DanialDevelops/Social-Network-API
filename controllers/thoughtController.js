@@ -87,27 +87,23 @@ module.exports = {
       res.status(500).json({ message: 'Error creating reaction', error: err.message });
     }
   },
-
   deleteReaction: async (req, res) => {
     try {
       const { thoughtId, reactionId } = req.params;
-
+  
       const thought = await Thought.findById(thoughtId);
       if (!thought) {
         return res.status(404).json({ message: 'Thought not found' });
       }
-
-      const reaction = thought.reactions.id(reactionId);
-      if (!reaction) {
-        return res.status(404).json({ message: 'Reaction not found' });
-      }
-
-      reaction.remove();
+      thought.reactions = thought.reactions.filter(
+        reaction => reaction._id.toString() !== reactionId
+      );
+  
       await thought.save();
-
+  
       res.json({ message: 'Reaction deleted successfully' });
     } catch (err) {
-      res.status(500).json(err);
+      res.status(500).json({ message: 'Error deleting reaction', error: err.message });
     }
   },
 };
